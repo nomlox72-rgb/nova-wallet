@@ -3,321 +3,846 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NovaWallet · Ultra Crypto Wallet</title>
+  <title>NovaWallet · Crypto Profile</title>
   <style>
+    /* RESET */
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     :root {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
       color-scheme: dark;
       --bg: #020617;
-      --bg-alt: #02081b;
-      --card: #020617;
-      --card-border: rgba(148, 163, 184, 0.25);
-      --text: #e5e7eb;
+      --bg2: #02081b;
+      --card: rgba(15,23,42,0.96);
+      --border: rgba(148,163,184,0.35);
       --muted: #9ca3af;
+      --text: #e5e7eb;
       --accent1: #22c55e;
       --accent2: #22d3ee;
       --accent3: #a855f7;
       --danger: #fb7185;
     }
     body {
-      min-height: 100vh;
+      min-height:100vh;
       background: radial-gradient(circle at top, #000 0, #020617 40%, #000 100%);
-      color: var(--text);
-      overflow-x: hidden;
+      color:var(--text);
+      overflow-x:hidden;
     }
     .bg-aurora {
-      position: fixed;
-      inset: 0;
-      z-index: -1;
+      position:fixed;
+      inset:0;
+      z-index:-1;
       background:
-        radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.22), transparent 55%),
-        radial-gradient(circle at 100% 0%, rgba(34, 197, 94, 0.2), transparent 55%),
-        radial-gradient(circle at 50% 100%, rgba(168, 85, 247, 0.25), transparent 60%);
-      filter: blur(120px);
-      opacity: 0.9;
-      pointer-events: none;
+        radial-gradient(circle at 0% 0%, rgba(56,189,248,0.22), transparent 55%),
+        radial-gradient(circle at 100% 0%, rgba(34,197,94,0.2), transparent 55%),
+        radial-gradient(circle at 50% 100%, rgba(168,85,247,0.25), transparent 60%);
+      filter:blur(120px);
+      opacity:0.95;
+      pointer-events:none;
     }
+
+    /* HEADER */
     header {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 18px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      backdrop-filter: blur(22px);
+      max-width:1120px;
+      margin:0 auto;
+      padding:14px 16px 4px;
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter:blur(22px);
     }
     .header-inner {
-      width: 100%;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.35);
-      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.9), rgba(2, 6, 23, 0.95));
-      padding: 8px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:radial-gradient(circle at top left, rgba(15,23,42,0.92), rgba(2,6,23,0.96));
+      padding:8px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
     }
     .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 18px;
-      font-weight: 600;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:18px;
+      font-weight:600;
     }
     .logo-orb {
-      width: 34px;
-      height: 34px;
-      border-radius: 999px;
-      background: conic-gradient(from 130deg, var(--accent1), var(--accent2), #6366f1, var(--accent3), var(--accent1));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      box-shadow: 0 0 22px rgba(34, 211, 238, 0.8);
+      width:34px;
+      height:34px;
+      border-radius:999px;
+      background:conic-gradient(from 130deg, var(--accent1), var(--accent2), #6366f1, var(--accent3), var(--accent1));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 0 20px rgba(34,211,238,0.8);
     }
     .logo-orb-inner {
-      width: 24px;
-      height: 24px;
-      border-radius: 999px;
-      background: #020617;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 14px;
-      color: var(--text);
+      width:24px;
+      height:24px;
+      border-radius:999px;
+      background:#020617;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      font-size:14px;
     }
     nav {
-      display: flex;
-      gap: 14px;
-      font-size: 13px;
+      display:flex;
+      gap:12px;
+      font-size:13px;
     }
     nav a {
-      text-decoration: none;
-      color: var(--muted);
-      padding: 5px 9px;
-      border-radius: 999px;
+      text-decoration:none;
+      color:var(--muted);
+      padding:4px 8px;
+      border-radius:999px;
     }
     nav a:hover {
-      background: rgba(30, 64, 175, 0.45);
-      color: var(--text);
+      background:rgba(30,64,175,0.45);
+      color:var(--text);
     }
-    .header-actions {
-      display: flex;
-      gap: 8px;
-      align-items: center;
+    .header-right {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .header-clock {
+      font-variant-numeric:tabular-nums;
     }
     .btn {
-      border-radius: 999px;
-      border: none;
-      padding: 8px 14px;
-      font-size: 13px;
-      cursor: pointer;
-      font-weight: 500;
-      white-space: nowrap;
-      transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease, background 0.12s ease;
+      border-radius:999px;
+      border:none;
+      padding:7px 13px;
+      font-size:13px;
+      cursor:pointer;
+      font-weight:500;
+      transition:0.15s;
+      white-space:nowrap;
     }
     .btn-primary {
-      background: linear-gradient(120deg, var(--accent1), var(--accent2));
-      color: #020617;
-      box-shadow: 0 0 20px rgba(45, 212, 191, 0.6);
+      background:linear-gradient(120deg,var(--accent1),var(--accent2));
+      color:#020617;
+      box-shadow:0 0 18px rgba(45,212,191,0.5);
     }
-    .btn-primary:hover {
-      opacity: 0.9;
-      transform: translateY(-0.5px);
-    }
+    .btn-primary:hover { opacity:0.9; transform:translateY(-0.5px); }
     .btn-ghost {
-      background: transparent;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      color: var(--text);
+      background:transparent;
+      border:1px solid var(--border);
+      color:var(--text);
     }
-    .btn-ghost:hover {
-      background: rgba(15, 23, 42, 0.95);
-    }
-    .btn-outline {
-      background: transparent;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      color: var(--text);
-    }
-    .btn-outline:hover {
-      background: rgba(15, 23, 42, 0.9);
-    }
+    .btn-ghost:hover { background:rgba(15,23,42,0.95); }
+
+    /* LAYOUT */
     .layout {
-      max-width: 1120px;
-      margin: 28px auto 0;
-      padding: 0 18px 40px;
-      display: grid;
-      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1.1fr);
-      gap: 24px;
-      align-items: stretch;
+      max-width:1120px;
+      margin:18px auto 0;
+      padding:0 16px 40px;
+      display:grid;
+      grid-template-columns:minmax(0,1.3fr) minmax(0,1.1fr);
+      gap:22px;
+      align-items:stretch;
     }
     .hero {
-      padding-right: 8px;
-      padding-top: 10px;
+      padding-top:6px;
     }
     .chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border-radius: 999px;
-      padding: 5px 11px;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9));
-      font-size: 11px;
-      color: var(--muted);
-      margin-bottom: 14px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border-radius:999px;
+      padding:5px 11px;
+      border:1px solid var(--border);
+      background:radial-gradient(circle at top left, rgba(15,23,42,0.96), rgba(15,23,42,0.9));
+      font-size:11px;
+      color:var(--muted);
+      margin-bottom:14px;
     }
     .chip-dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 999px;
-      background: var(--accent1);
-      box-shadow: 0 0 10px rgba(34, 197, 94, 0.9);
+      width:9px; height:9px; border-radius:999px;
+      background:var(--accent1);
+      box-shadow:0 0 10px rgba(34,197,94,0.9);
     }
     .hero-title {
-      font-size: clamp(28px, 3.3vw + 8px, 40px);
-      line-height: 1.1;
-      margin-bottom: 10px;
+      font-size:clamp(26px,3.2vw+8px,38px);
+      line-height:1.15;
+      margin-bottom:8px;
     }
     .gradient-text {
-      background: linear-gradient(120deg, var(--accent1), var(--accent2), var(--accent3));
-      -webkit-background-clip: text;
-      color: transparent;
+      background:linear-gradient(120deg,var(--accent1),var(--accent2),var(--accent3));
+      -webkit-background-clip:text;
+      color:transparent;
     }
     .hero-subtitle {
-      font-size: 14px;
-      color: var(--muted);
-      max-width: 460px;
-      margin-bottom: 18px;
+      font-size:14px;
+      color:var(--muted);
+      max-width:460px;
+      margin-bottom:16px;
     }
     .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 18px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-bottom:18px;
     }
     .hero-metrics {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-      margin-top: 8px;
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:12px;
     }
     .metric-label {
-      font-size: 11px;
-      color: var(--muted);
-      margin-bottom: 2px;
+      font-size:11px;
+      color:var(--muted);
+      margin-bottom:2px;
     }
     .metric-value {
-      font-size: 14px;
+      font-size:14px;
     }
-    .metric-positive {
-      color: #4ade80;
-      font-size: 12px;
+    .metric-pos {
+      font-size:11px;
+      color:#4ade80;
     }
-    .panel {
-      border-radius: 24px;
-      border: 1px solid rgba(148, 163, 184, 0.35);
+
+    /* RIGHT HERO CARD (PREVIEW) */
+    .preview-card {
+      border-radius:22px;
+      border:1px solid var(--border);
       background:
-        radial-gradient(circle at top left, rgba(37, 99, 235, 0.14), transparent 60%),
-        radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.18), transparent 55%),
-        rgba(15, 23, 42, 0.96);
-      padding: 18px 16px 16px;
-      box-shadow: 0 22px 60px rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(22px);
-      position: relative;
-      overflow: hidden;
+        radial-gradient(circle at top left, rgba(37,99,235,0.16), transparent 60%),
+        radial-gradient(circle at bottom right, rgba(16,185,129,0.2), transparent 55%),
+        rgba(15,23,42,0.96);
+      padding:16px 14px 14px;
+      box-shadow:0 22px 60px rgba(0,0,0,0.85);
+      backdrop-filter:blur(22px);
     }
-    .panel-orbit {
-      position: absolute;
-      inset: -40%;
-      border-radius: 999px;
-      border: 1px dashed rgba(148, 163, 184, 0.25);
-      opacity: 0.25;
-      pointer-events: none;
+    .preview-header {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:10px;
+      font-size:12px;
     }
-    .panel-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      font-size: 13px;
-      margin-bottom: 12px;
-      position: relative;
-      z-index: 1;
+    .status-pill {
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:3px 8px;
+      border-radius:999px;
+      background:rgba(15,23,42,0.96);
+      border:1px solid rgba(55,65,81,1);
+      font-size:11px;
+      color:var(--muted);
     }
-    .panel-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 3px 9px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid rgba(148, 163, 184, 0.35);
-      font-size: 11px;
-      color: var(--muted);
+    .status-dot {
+      width:8px;height:8px;border-radius:999px;
+      background:var(--accent1);
+      box-shadow:0 0 8px rgba(34,197,94,0.9);
     }
-    .status-dot-online {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: var(--accent1);
-      box-shadow: 0 0 8px rgba(34, 197, 94, 0.95);
+    .preview-clock {
+      font-variant-numeric:tabular-nums;
+      color:var(--muted);
+      font-size:12px;
     }
-    .clock {
-      font-variant-numeric: tabular-nums;
-      font-size: 13px;
-      color: var(--muted);
+    .preview-balance {
+      border-radius:18px;
+      border:1px solid rgba(148,163,184,0.6);
+      padding:10px 11px;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:10px;
+      background:rgba(15,23,42,0.96);
     }
-    .panel-main {
-      position: relative;
-      z-index: 1;
+    .preview-balance-main {
+      font-size:20px;
+      font-weight:600;
     }
-    .wallet-balance-card {
-      border-radius: 16px;
-      border: 1px solid rgba(148, 163, 184, 0.55);
-      padding: 12px 12px 10px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 8px;
-      background: rgba(15, 23, 42, 0.96);
+    .preview-balance-sub {
+      font-size:12px;
+      color:#4ade80;
     }
-    .wallet-balance-label {
-      font-size: 11px;
-      color: var(--muted);
-      margin-bottom: 3px;
+    .preview-avatar-row {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:12px;
+      margin-bottom:8px;
     }
-    .wallet-balance-amount {
-      font-size: 20px;
-      font-weight: 600;
+    .avatar {
+      width:30px;height:30px;border-radius:999px;
+      background:conic-gradient(from 150deg,var(--accent2),var(--accent3),var(--accent1));
+      display:flex;align-items:center;justify-content:center;
+      font-size:13px;font-weight:600;color:#020617;
     }
-    .wallet-balance-change {
-      font-size: 12px;
-      color: #4ade80;
+    .avatar-name {
+      font-size:13px;
     }
-    .wallet-owner {
-      font-size: 11px;
-      color: var(--muted);
-      margin-bottom: 6px;
+    .avatar-email {
+      font-size:11px;
+      color:var(--muted);
     }
-    .wallet-network-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 3px 8px;
-      border-radius: 999px;
-      font-size: 10px;
-      background: rgba(15, 23, 42, 0.96);
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      color: var(--muted);
+    .preview-grid {
+      margin-top:8px;
+      display:grid;
+      grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);
+      gap:8px;
+      font-size:11px;
     }
-    .chain-dot {
-      width: 10px;
-      height: 10px;
-      bor
+    .mini-card {
+      border-radius:14px;
+      border:1px solid rgba(31,41,55,1);
+      background:rgba(15,23,42,0.98);
+      padding:8px;
+    }
+    .mini-card-title {
+      font-size:11px;
+      color:var(--muted);
+      margin-bottom:4px;
+    }
+    .mini-card-value {
+      font-size:13px;
+    }
+
+    /* AUTH + PROFILE SECTIONS */
+    .section-wide {
+      max-width:1120px;
+      margin:0 auto;
+      padding:0 16px 32px;
+    }
+    .auth-profile-grid {
+      display:grid;
+      grid-template-columns:minmax(0,1.05fr) minmax(0,1.15fr);
+      gap:20px;
+    }
+    .card {
+      border-radius:22px;
+      border:1px solid var(--border);
+      background:var(--card);
+      padding:18px 16px 18px;
+      backdrop-filter:blur(18px);
+    }
+    .card-title {
+      font-size:18px;
+      margin-bottom:4px;
+    }
+    .card-sub {
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:12px;
+    }
+    .input-group { margin-top:8px; }
+    .input-label {
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:4px;
+      display:block;
+    }
+    .input {
+      width:100%;
+      padding:9px 11px;
+      border-radius:12px;
+      border:1px solid rgba(55,65,81,1);
+      background:rgba(15,23,42,0.98);
+      color:var(--text);
+      font-size:13px;
+      outline:none;
+      font-family:inherit;
+    }
+    .input:focus {
+      border-color:var(--accent1);
+      box-shadow:0 0 0 1px rgba(34,197,94,0.6);
+    }
+    .auth-row {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:8px;
+    }
+    .auth-helper {
+      margin-top:8px;
+      font-size:11px;
+      color:var(--muted);
+    }
+    .auth-status {
+      margin-top:8px;
+      font-size:11px;
+      display:none;
+    }
+    .auth-status.error { color:var(--danger); }
+    .auth-status.success { color:#4ade80; }
+
+    /* PROFILE CARD */
+    .profile-header {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-bottom:10px;
+    }
+    .profile-avatar {
+      width:40px;height:40px;border-radius:999px;
+      background:conic-gradient(from 150deg,var(--accent1),var(--accent2),var(--accent3));
+      display:flex;align-items:center;justify-content:center;
+      font-weight:700;font-size:16px;color:#020617;
+    }
+    .profile-name {
+      font-size:15px;
+      font-weight:500;
+    }
+    .profile-email {
+      font-size:11px;
+      color:var(--muted);
+    }
+    .profile-clock {
+      margin-left:auto;
+      font-variant-numeric:tabular-nums;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .profile-grid {
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:8px;
+      margin-top:6px;
+      font-size:12px;
+    }
+    .profile-stat {
+      border-radius:14px;
+      border:1px solid rgba(31,41,55,1);
+      background:rgba(15,23,42,1);
+      padding:7px 8px;
+    }
+    .profile-stat-label {
+      font-size:11px;
+      color:var(--muted);
+      margin-bottom:2px;
+    }
+    .profile-stat-value {
+      font-size:13px;
+    }
+    .profile-tags {
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      margin-top:10px;
+      font-size:11px;
+    }
+    .tag {
+      border-radius:999px;
+      border:1px solid rgba(55,65,81,1);
+      padding:3px 7px;
+      color:var(--muted);
+    }
+
+    /* FEATURES */
+    .features {
+      max-width:1120px;
+      margin:0 auto;
+      padding:4px 16px 0;
+    }
+    .features-title {
+      font-size:18px;
+      margin-bottom:10px;
+    }
+    .features-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:10px;
+      padding-bottom:26px;
+    }
+    .feature-card {
+      border-radius:18px;
+      border:1px solid rgba(31,41,55,1);
+      background:rgba(15,23,42,0.98);
+      padding:12px;
+      font-size:13px;
+    }
+    .feature-card h3 {
+      font-size:14px;
+      margin-bottom:5px;
+    }
+    .feature-card p { color:var(--muted); }
+
+    /* FOOTER */
+    .footer {
+      max-width:1120px;
+      margin:24px auto 28px;
+      padding:10px 16px 0;
+      border-top:1px solid rgba(31,41,55,1);
+      font-size:11px;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+
+    @media (max-width:900px) {
+      .layout {
+        grid-template-columns:minmax(0,1fr);
+      }
+      .preview-card { order:-1; }
+      nav { display:none; }
+      .auth-profile-grid {
+        grid-template-columns:minmax(0,1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="bg-aurora"></div>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-orb"><div class="logo-orb-inner">N</div></div>
+      NovaWallet
+    </div>
+    <nav>
+      <a href="#auth">Login</a>
+      <a href="#profile">Profile</a>
+      <a href="#features">Features</a>
+    </nav>
+    <div class="header-right">
+      <span class="header-clock" id="header-clock">--:--:--</span>
+      <button class="btn btn-ghost" onclick="scrollToSection('auth')">Sign in</button>
+    </div>
+  </div>
+</header>
+
+<main class="layout">
+  <section class="hero">
+    <div class="chip">
+      <span class="chip-dot"></span>
+      Ultra demo · Front-end only · No real funds
+    </div>
+    <h1 class="hero-title">
+      Full crypto <span class="gradient-text">profile dashboard</span> with live clock & virtual wallet.
+    </h1>
+    <p class="hero-subtitle">
+      Register a demo account, auto-login into your profile, watch your fake balance, live clock and stats.
+      Барлығы front-end, бірақ көрінісі — нағыз production UI.
+    </p>
+    <div class="hero-actions">
+      <button class="btn btn-primary" onclick="scrollToSection('auth')">Create demo profile</button>
+      <button class="btn btn-ghost" onclick="scrollToSection('profile')">View profile preview</button>
+    </div>
+    <div class="hero-metrics">
+      <div>
+        <div class="metric-label">Current demo balance</div>
+        <div class="metric-value" id="hero-balance">$12,540.88</div>
+        <div class="metric-pos" id="hero-change">+3.4% today</div>
+      </div>
+      <div>
+        <div class="metric-label">Supported networks</div>
+        <div class="metric-value">Ethereum · BNB · Tron</div>
+      </div>
+      <div>
+        <div class="metric-label">Profile mode</div>
+        <div class="metric-value" id="hero-profile-mode">Guest</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="preview-card" aria-label="Wallet preview">
+    <div class="preview-header">
+      <div class="status-pill">
+        <span class="status-dot"></span>
+        Demo wallet online
+      </div>
+      <span class="preview-clock" id="preview-clock">--:--</span>
+    </div>
+
+    <div class="preview-avatar-row">
+      <div class="avatar" id="preview-avatar">G</div>
+      <div>
+        <div class="avatar-name" id="preview-name">Guest user</div>
+        <div class="avatar-email" id="preview-email">guest@demo.wallet</div>
+      </div>
+    </div>
+
+    <div class="preview-balance">
+      <div>
+        <div style="font-size:11px;color:var(--muted);">Total balance (demo)</div>
+        <div class="preview-balance-main" id="preview-balance">$12,540.88</div>
+        <div class="preview-balance-sub" id="preview-change">+3.4% today</div>
+      </div>
+      <div style="text-align:right;font-size:11px;color:var(--muted);">
+        <div>Network: <span id="preview-network">Ethereum mainnet</span></div>
+        <div>Mode: <span id="preview-mode">Guest</span></div>
+      </div>
+    </div>
+
+    <div class="preview-grid">
+      <div class="mini-card">
+        <div class="mini-card-title">Last login</div>
+        <div class="mini-card-value" id="preview-last-login">—</div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-card-title">Active sessions</div>
+        <div class="mini-card-value">1 web · 0 mobile</div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-card-title">Favorite asset</div>
+        <div class="mini-card-value">BTC · ETH pair</div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-card-title">Security</div>
+        <div class="mini-card-value">Non-custodial UI</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<section id="auth" class="section-wide">
+  <div class="auth-profile-grid">
+    <div class="card">
+      <h2 class="card-title">Create / login demo profile</h2>
+      <p class="card-sub">
+        Бұл форма тек демонстрация үшін. Құпия сөздер ешқайда сақталмайды, blockchain-ге қосылмаған.
+      </p>
+      <div class="auth-row">
+        <div class="input-group">
+          <label class="input-label">First name</label>
+          <input id="first-name" class="input" placeholder="Ayan" />
+        </div>
+        <div class="input-group">
+          <label class="input-label">Last name</label>
+          <input id="last-name" class="input" placeholder="KZ" />
+        </div>
+      </div>
+      <div class="input-group">
+        <label class="input-label">E-mail</label>
+        <input id="email" class="input" type="email" placeholder="you@example.com" />
+      </div>
+      <div class="auth-row">
+        <div class="input-group">
+          <label class="input-label">Password</label>
+          <input id="password" class="input" type="password" placeholder="••••••••" />
+        </div>
+        <div class="input-group">
+          <label class="input-label">Repeat password</label>
+          <input id="password2" class="input" type="password" placeholder="••••••••" />
+        </div>
+      </div>
+      <div class="input-group">
+        <label class="input-label">Preferred network</label>
+        <select id="network" class="input" style="appearance:none;cursor:pointer;">
+          <option>Ethereum mainnet (demo)</option>
+          <option>BNB Chain (demo)</option>
+          <option>Tron (demo)</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" id="register-btn" type="button" style="margin-top:12px;width:100%;">
+        Create demo account & open profile
+      </button>
+      <p id="register-status" class="auth-status"></p>
+      <p class="auth-helper">
+        Тіркелгеннен кейін жоғарыдағы профиль бөлімі автоматты толтырылады: есім, email, live clock, баланс, статустар.
+      </p>
+    </div>
+
+    <div class="card" id="profile">
+      <div class="profile-header">
+        <div class="profile-avatar" id="profile-avatar">G</div>
+        <div>
+          <div class="profile-name" id="profile-name">Guest user</div>
+          <div class="profile-email" id="profile-email">guest@demo.wallet</div>
+        </div>
+        <div class="profile-clock" id="profile-clock">--:--:--</div>
+      </div>
+      <p class="card-sub">
+        Бұл — сенің demo профилің. Мұнда тек визуалды деректер көрсетіледі: баланс, статус, соңғы логин, сағат.
+        Реальный ақша және blockchain транзакция жоқ.
+      </p>
+      <div class="profile-grid">
+        <div class="profile-stat">
+          <div class="profile-stat-label">Current balance (demo)</div>
+          <div class="profile-stat-value" id="profile-balance">$12,540.88</div>
+        </div>
+        <div class="profile-stat">
+          <div class="profile-stat-label">Daily PnL</div>
+          <div class="profile-stat-value" id="profile-change">+3.4% today</div>
+        </div>
+        <div class="profile-stat">
+          <div class="profile-stat-label">Last login</div>
+          <div class="profile-stat-value" id="profile-last-login">—</div>
+        </div>
+      </div>
+      <div class="profile-tags" id="profile-tags">
+        <span class="tag">Guest mode</span>
+        <span class="tag">Virtual wallet</span>
+        <span class="tag">Safe demo</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="features" class="features">
+  <h2 class="features-title">What this template includes</h2>
+  <div class="features-grid">
+    <article class="feature-card">
+      <h3>Live clock everywhere</h3>
+      <p>Header, preview-card, profile ішінде real-time сағат жүреді. Профильге кірген эффекті өте тірі қылады.</p>
+    </article>
+    <article class="feature-card">
+      <h3>Virtual profile logic</h3>
+      <p>Есім, email, network таңдағанда — профиль, аватар, баланс, статус бәрі жаңарып кетеді. Барлығы front-end.</p>
+    </article>
+    <article class="feature-card">
+      <h3>Crypto-style gradients</h3>
+      <p>Көпқабатты градиенттер, стеклянный карталар, professional dark UI. Презентация, портфолио, клиентке көрсетуге идеал.</p>
+    </article>
+    <article class="feature-card">
+      <h3>Render-ready</h3>
+      <p>Тек бір <code>index.html</code> керек. GitHub → Render Static Site → Publish directory <code>.</code> → болды, сайт онлайн.</p>
+    </article>
+  </div>
+</section>
+
+<footer class="footer">
+  <span>© 2025 NovaWallet Demo · Front-end only · No real blockchain</span>
+  <span>Built as a professional crypto wallet & profile UI for presentations.</span>
+</footer>
+
+<script>
+  // Smooth scroll helper
+  function scrollToSection(id) {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+  }
+
+  // Global clocks (header + preview + profile)
+  function updateClocks() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, "0");
+    const m = String(now.getMinutes()).padStart(2, "0");
+    const s = String(now.getSeconds()).padStart(2, "0");
+
+    const headerClock = document.getElementById("header-clock");
+    const previewClock = document.getElementById("preview-clock");
+    const profileClock = document.getElementById("profile-clock");
+
+    if (headerClock) headerClock.textContent = h + ":" + m + ":" + s;
+    if (previewClock) previewClock.textContent = h + ":" + m;
+    if (profileClock) profileClock.textContent = h + ":" + m + ":" + s;
+  }
+  updateClocks();
+  setInterval(updateClocks, 1000);
+
+  // Format money helper
+  function formatMoney(num) {
+    return num.toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  }
+
+  // Registration -> virtual profile
+  const registerBtn = document.getElementById("register-btn");
+  const statusEl = document.getElementById("register-status");
+
+  if (registerBtn && statusEl) {
+    registerBtn.addEventListener("click", () => {
+      const first = document.getElementById("first-name").value.trim();
+      const last = document.getElementById("last-name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const pass = document.getElementById("password").value;
+      const pass2 = document.getElementById("password2").value;
+      const network = document.getElementById("network").value;
+
+      statusEl.style.display = "block";
+
+      if (!first || !email || !pass || !pass2) {
+        statusEl.textContent = "Толық эффект үшін кем дегенде есім, email және парольдерді толтыр.";
+        statusEl.classList.remove("success");
+        statusEl.classList.add("error");
+        return;
+      }
+      if (pass !== pass2) {
+        statusEl.textContent = "Парольдер сәйкес емес (тек демо, бірақ бәрі әдемі болсын).";
+        statusEl.classList.remove("success");
+        statusEl.classList.add("error");
+        return;
+      }
+
+      // Success
+      statusEl.textContent = "Demo профиль сәтті жасалды! Профильге өтудеміз…";
+      statusEl.classList.remove("error");
+      statusEl.classList.add("success");
+
+      const fullName = last ? first + " " + last : first;
+      const initials = (first[0] || "U").toUpperCase();
+
+      // Random fake balance + change
+      const base = 8000 + Math.floor(Math.random() * 15000); // 8k–23k
+      const change = (1 + Math.random() * 6).toFixed(1); // 1–7%
+
+      // Update hero
+      const heroBalance = document.getElementById("hero-balance");
+      const heroChange = document.getElementById("hero-change");
+      const heroProfileMode = document.getElementById("hero-profile-mode");
+      if (heroBalance) heroBalance.textContent = "$" + formatMoney(base);
+      if (heroChange) heroChange.textContent = "+" + change + "% today";
+      if (heroProfileMode) heroProfileMode.textContent = "Logged in";
+
+      // Update preview card
+      const prevName = document.getElementById("preview-name");
+      const prevEmail = document.getElementById("preview-email");
+      const prevAvatar = document.getElementById("preview-avatar");
+      const prevBalance = document.getElementById("preview-balance");
+      const prevChange = document.getElementById("preview-change");
+      const prevNet = document.getElementById("preview-network");
+      const prevMode = document.getElementById("preview-mode");
+      const prevLogin = document.getElementById("preview-last-login");
+
+      if (prevName) prevName.textContent = fullName;
+      if (prevEmail) prevEmail.textContent = email;
+      if (prevAvatar) prevAvatar.textContent = initials;
+      if (prevBalance) prevBalance.textContent = "$" + formatMoney(base);
+      if (prevChange) prevChange.textContent = "+" + change + "% today";
+      if (prevNet) prevNet.textContent = network.replace(" (demo)", "");
+      if (prevMode) prevMode.textContent = "Logged in";
+      if (prevLogin) prevLogin.textContent = "Just now · web";
+
+      // Update profile card
+      const profName = document.getElementById("profile-name");
+      const profEmail = document.getElementById("profile-email");
+      const profAvatar = document.getElementById("profile-avatar");
+      const profBalance = document.getElementById("profile-balance");
+      const profChange = document.getElementById("profile-change");
+      const profLastLogin = document.getElementById("profile-last-login");
+      const profTags = document.getElementById("profile-tags");
+
+      if (profName) profName.textContent = fullName;
+      if (profEmail) profEmail.textContent = email;
+      if (profAvatar) profAvatar.textContent = initials;
+      if (profBalance) profBalance.textContent = "$" + formatMoney(base);
+      if (profChange) profChange.textContent = "+" + change + "% today";
+      if (profLastLogin) profLastLogin.textContent = "Just now · " + network;
+
+      if (profTags) {
+        profTags.innerHTML = "";
+        const tags = [
+          "Demo profile active",
+          network,
+          "Virtual balance: $" + formatMoney(base),
+          "Safe front-end only"
+        ];
+        tags.forEach(t => {
+          const span = document.createElement("span");
+          span.className = "tag";
+          span.textContent = t;
+          profTags.appendChild(span);
+        });
+      }
+
+      // Smooth scroll to profile
+      scrollToSection("profile");
+    });
+  }
+</script>
+
+</body>
+</html>
