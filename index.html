@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NovaWallet · Crypto Profile</title>
+  <title>NovaWallet · Crypto Profile & Mining</title>
   <style>
-    /* RESET */
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     :root {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
@@ -39,6 +38,7 @@
       opacity:0.95;
       pointer-events:none;
     }
+    .hidden { display:none !important; }
 
     /* HEADER */
     header {
@@ -206,7 +206,7 @@
       color:#4ade80;
     }
 
-    /* RIGHT HERO CARD (PREVIEW) */
+    /* PREVIEW CARD */
     .preview-card {
       border-radius:22px;
       border:1px solid var(--border);
@@ -246,24 +246,6 @@
       color:var(--muted);
       font-size:12px;
     }
-    .preview-balance {
-      border-radius:18px;
-      border:1px solid rgba(148,163,184,0.6);
-      padding:10px 11px;
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom:10px;
-      background:rgba(15,23,42,0.96);
-    }
-    .preview-balance-main {
-      font-size:20px;
-      font-weight:600;
-    }
-    .preview-balance-sub {
-      font-size:12px;
-      color:#4ade80;
-    }
     .preview-avatar-row {
       display:flex;
       align-items:center;
@@ -283,6 +265,24 @@
     .avatar-email {
       font-size:11px;
       color:var(--muted);
+    }
+    .preview-balance {
+      border-radius:18px;
+      border:1px solid rgba(148,163,184,0.6);
+      padding:10px 11px;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:10px;
+      background:rgba(15,23,42,0.96);
+    }
+    .preview-balance-main {
+      font-size:20px;
+      font-weight:600;
+    }
+    .preview-balance-sub {
+      font-size:12px;
+      color:#4ade80;
     }
     .preview-grid {
       margin-top:8px;
@@ -306,7 +306,7 @@
       font-size:13px;
     }
 
-    /* AUTH + PROFILE SECTIONS */
+    /* SECTIONS */
     .section-wide {
       max-width:1120px;
       margin:0 auto;
@@ -435,6 +435,72 @@
       color:var(--muted);
     }
 
+    /* DASHBOARD (MINING + PORTFOLIO + NOTES) */
+    .dashboard-grid {
+      display:grid;
+      grid-template-columns:2fr 1.5fr;
+      gap:18px;
+      margin-top:18px;
+    }
+    .dashboard-mining {
+      display:grid;
+      grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);
+      gap:10px;
+    }
+    .pill-row {
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      margin-top:8px;
+    }
+    .pill {
+      border-radius:999px;
+      border:1px solid rgba(55,65,81,1);
+      padding:3px 7px;
+      font-size:11px;
+      color:var(--muted);
+    }
+    .mining-value {
+      font-size:18px;
+      font-variant-numeric:tabular-nums;
+    }
+    .mining-label {
+      font-size:11px;
+      color:var(--muted);
+    }
+    .portfolio-table {
+      width:100%;
+      border-collapse:collapse;
+      margin-top:8px;
+      font-size:12px;
+    }
+    .portfolio-table th,
+    .portfolio-table td {
+      padding:6px 4px;
+      border-bottom:1px solid rgba(31,41,55,1);
+      text-align:right;
+    }
+    .portfolio-table th:first-child,
+    .portfolio-table td:first-child { text-align:left; }
+    .notes-area {
+      width:100%;
+      min-height:120px;
+      padding:8px 9px;
+      border-radius:12px;
+      border:1px solid rgba(55,65,81,1);
+      background:rgba(15,23,42,1);
+      color:var(--text);
+      font-size:13px;
+      resize:vertical;
+      outline:none;
+      font-family:inherit;
+    }
+    .notes-status {
+      margin-top:6px;
+      font-size:11px;
+      color:var(--muted);
+    }
+
     /* FEATURES */
     .features {
       max-width:1120px;
@@ -463,6 +529,13 @@
       margin-bottom:5px;
     }
     .feature-card p { color:var(--muted); }
+    .abai-img {
+      width:100%;
+      border-radius:14px;
+      margin-bottom:8px;
+      object-fit:cover;
+      max-height:210px;
+    }
 
     /* FOOTER */
     .footer {
@@ -487,6 +560,12 @@
       .auth-profile-grid {
         grid-template-columns:minmax(0,1fr);
       }
+      .dashboard-grid {
+        grid-template-columns:minmax(0,1fr);
+      }
+      .dashboard-mining {
+        grid-template-columns:minmax(0,1fr);
+      }
     }
   </style>
 </head>
@@ -502,6 +581,7 @@
     <nav>
       <a href="#auth">Login</a>
       <a href="#profile">Profile</a>
+      <a href="#dashboard">Mining & Portfolio</a>
       <a href="#features">Features</a>
     </nav>
     <div class="header-right">
@@ -518,15 +598,15 @@
       Ultra demo · Front-end only · No real funds
     </div>
     <h1 class="hero-title">
-      Full crypto <span class="gradient-text">profile dashboard</span> with live clock & virtual wallet.
+      Full crypto <span class="gradient-text">profile, mining & portfolio</span> in one clean UI.
     </h1>
     <p class="hero-subtitle">
-      Register a demo account, auto-login into your profile, watch your fake balance, live clock and stats.
-      Барлығы front-end, бірақ көрінісі — нағыз production UI.
+      Register a demo account, auto-login into your profile, watch virtual mining,
+      live clock, fake balance & portfolio. Барлығы front-end, бірақ вида прям готовый продукт.
     </p>
     <div class="hero-actions">
       <button class="btn btn-primary" onclick="scrollToSection('auth')">Create demo profile</button>
-      <button class="btn btn-ghost" onclick="scrollToSection('profile')">View profile preview</button>
+      <button class="btn btn-ghost" onclick="scrollToSection('dashboard')">Open mining & portfolio</button>
     </div>
     <div class="hero-metrics">
       <div>
@@ -635,11 +715,11 @@
         </select>
       </div>
       <button class="btn btn-primary" id="register-btn" type="button" style="margin-top:12px;width:100%;">
-        Create demo account & open profile
+        Create demo account & open dashboard
       </button>
       <p id="register-status" class="auth-status"></p>
       <p class="auth-helper">
-        Тіркелгеннен кейін жоғарыдағы профиль бөлімі автоматты толтырылады: есім, email, live clock, баланс, статустар.
+        Тіркелгеннен кейін профиль, майнинг, портфель, заметки — бәрі сенің “атыңмен” жұмыс істейді (виртуалды).
       </p>
     </div>
 
@@ -679,31 +759,136 @@
   </div>
 </section>
 
+<section id="dashboard" class="section-wide hidden">
+  <div class="card">
+    <h2 class="card-title">Demo mining & portfolio</h2>
+    <p class="card-sub">
+      Виртуальный майнинг (отирик), фейк портфель с монетами және заметки. Барлығы жұмыс істейді, бірақ тек көрініс үшін.
+    </p>
+
+    <div class="dashboard-grid">
+      <div>
+        <!-- MINING -->
+        <div class="dashboard-mining">
+          <div class="card" style="padding:12px 12px 14px;">
+            <div class="profile-stat-label">Virtual mining</div>
+            <div class="mining-value" id="mining-earned">0.00000000 BTC</div>
+            <div class="mining-label" id="mining-status">Status: stopped</div>
+            <div class="mining-label" id="mining-hashrate">Hashrate: 0 MH/s</div>
+            <button class="btn btn-primary" id="mining-btn" type="button" style="margin-top:10px;">
+              Start fake mining
+            </button>
+            <div class="pill-row">
+              <span class="pill">GPU demo</span>
+              <span class="pill">No electricity bill</span>
+              <span class="pill">Kazakh style miner</span>
+            </div>
+          </div>
+          <!-- NOTES -->
+          <div class="card" style="padding:12px 12px 14px;">
+            <div class="profile-stat-label">Notes (local only)</div>
+            <textarea id="notes-text" class="notes-area" placeholder="Мында өз ойларыңды, private seed емес, просто жазба жаз 😊"></textarea>
+            <button class="btn btn-ghost" id="notes-save" type="button" style="margin-top:8px;">Save notes</button>
+            <div class="notes-status" id="notes-status">Not saved yet.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PORTFOLIO -->
+      <div class="card" id="portfolio-card" style="padding:12px 12px 14px;">
+        <div class="profile-stat-label">Demo portfolio</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px;">
+          <div>
+            <div class="profile-stat-label">Owner</div>
+            <div class="profile-stat-value" id="portfolio-owner">Guest user</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="profile-stat-label">Total value</div>
+            <div class="profile-stat-value" id="portfolio-total">$12,540.88</div>
+          </div>
+        </div>
+        <table class="portfolio-table">
+          <thead>
+            <tr>
+              <th>Asset</th>
+              <th>Amount</th>
+              <th>Price</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody id="portfolio-body">
+            <tr>
+              <td>BTC</td>
+              <td>0.12</td>
+              <td>$42,300</td>
+              <td>$5,076</td>
+            </tr>
+            <tr>
+              <td>ETH</td>
+              <td>2.10</td>
+              <td>$2,340</td>
+              <td>$4,914</td>
+            </tr>
+            <tr>
+              <td>BNB</td>
+              <td>6.5</td>
+              <td>$330</td>
+              <td>$2,145</td>
+            </tr>
+            <tr>
+              <td>USDT</td>
+              <td>400</td>
+              <td>$1.00</td>
+              <td>$400</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="pill-row">
+          <span class="pill">Fake P&L</span>
+          <span class="pill">Editable in code</span>
+          <span class="pill">Presentation ready</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="features" class="features">
-  <h2 class="features-title">What this template includes</h2>
+  <h2 class="features-title">Extras for style: Abai & pro-level UI</h2>
   <div class="features-grid">
+    <article class="feature-card">
+      <!-- Абайдың суреті (URL жұмыс істемесе, src-ты өз суретіңмен ауыстыра аласың) -->
+      <img
+        class="abai-img"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Abai_Qunanbaiuli.jpg/400px-Abai_Qunanbaiuli.jpg"
+        alt="Abai Qunanbaiuly portrait"
+        onerror="this.style.display='none';"
+      />
+      <h3>Абай Құнанбайұлы</h3>
+      <p>
+        Қазақ мәдениетіне респект ретінде Абайдың суретін қойдық. Сайтқа ұлттық стиль береді.
+        Қаласаң, цитаталарын да қосуға болады.
+      </p>
+    </article>
+
     <article class="feature-card">
       <h3>Live clock everywhere</h3>
       <p>Header, preview-card, profile ішінде real-time сағат жүреді. Профильге кірген эффекті өте тірі қылады.</p>
     </article>
     <article class="feature-card">
-      <h3>Virtual profile logic</h3>
-      <p>Есім, email, network таңдағанда — профиль, аватар, баланс, статус бәрі жаңарып кетеді. Барлығы front-end.</p>
+      <h3>Virtual mining & notes</h3>
+      <p>Start/Stop майнинг, fake BTC табыс, hashrate, заметки localStorage-та сақталады. Барлығы жұмыс істейді, бірақ қауіпсіз.</p>
     </article>
     <article class="feature-card">
-      <h3>Crypto-style gradients</h3>
-      <p>Көпқабатты градиенттер, стеклянный карталар, professional dark UI. Презентация, портфолио, клиентке көрсетуге идеал.</p>
-    </article>
-    <article class="feature-card">
-      <h3>Render-ready</h3>
-      <p>Тек бір <code>index.html</code> керек. GitHub → Render Static Site → Publish directory <code>.</code> → болды, сайт онлайн.</p>
+      <h3>Render-ready crypto UI</h3>
+      <p>Тек бір <code>index.html</code>. GitHub → Render Static Site → Publish directory <code>.</code> → болды, сайт онлайн.</p>
     </article>
   </div>
 </section>
 
 <footer class="footer">
   <span>© 2025 NovaWallet Demo · Front-end only · No real blockchain</span>
-  <span>Built as a professional crypto wallet & profile UI for presentations.</span>
+  <span>Built as a professional crypto wallet, mining & profile UI for presentations.</span>
 </footer>
 
 <script>
@@ -713,7 +898,7 @@
     if (el) el.scrollIntoView({ behavior: "smooth" });
   }
 
-  // Global clocks (header + preview + profile)
+  // Global clocks
   function updateClocks() {
     const now = new Date();
     const h = String(now.getHours()).padStart(2, "0");
@@ -731,7 +916,7 @@
   updateClocks();
   setInterval(updateClocks, 1000);
 
-  // Format money helper
+  // Money format helper
   function formatMoney(num) {
     return num.toLocaleString("en-US", {
       minimumFractionDigits: 2,
@@ -739,7 +924,9 @@
     });
   }
 
-  // Registration -> virtual profile
+  let currentBalance = 12540.88;
+
+  // Registration -> virtual profile & dashboard
   const registerBtn = document.getElementById("register-btn");
   const statusEl = document.getElementById("register-status");
 
@@ -767,8 +954,7 @@
         return;
       }
 
-      // Success
-      statusEl.textContent = "Demo профиль сәтті жасалды! Профильге өтудеміз…";
+      statusEl.textContent = "Demo профиль сәтті жасалды! Профиль және портфель ашылуда…";
       statusEl.classList.remove("error");
       statusEl.classList.add("success");
 
@@ -776,18 +962,18 @@
       const initials = (first[0] || "U").toUpperCase();
 
       // Random fake balance + change
-      const base = 8000 + Math.floor(Math.random() * 15000); // 8k–23k
+      currentBalance = 8000 + Math.floor(Math.random() * 15000); // 8k–23k
       const change = (1 + Math.random() * 6).toFixed(1); // 1–7%
 
       // Update hero
       const heroBalance = document.getElementById("hero-balance");
       const heroChange = document.getElementById("hero-change");
       const heroProfileMode = document.getElementById("hero-profile-mode");
-      if (heroBalance) heroBalance.textContent = "$" + formatMoney(base);
+      if (heroBalance) heroBalance.textContent = "$" + formatMoney(currentBalance);
       if (heroChange) heroChange.textContent = "+" + change + "% today";
       if (heroProfileMode) heroProfileMode.textContent = "Logged in";
 
-      // Update preview card
+      // Update preview
       const prevName = document.getElementById("preview-name");
       const prevEmail = document.getElementById("preview-email");
       const prevAvatar = document.getElementById("preview-avatar");
@@ -800,13 +986,13 @@
       if (prevName) prevName.textContent = fullName;
       if (prevEmail) prevEmail.textContent = email;
       if (prevAvatar) prevAvatar.textContent = initials;
-      if (prevBalance) prevBalance.textContent = "$" + formatMoney(base);
+      if (prevBalance) prevBalance.textContent = "$" + formatMoney(currentBalance);
       if (prevChange) prevChange.textContent = "+" + change + "% today";
       if (prevNet) prevNet.textContent = network.replace(" (demo)", "");
       if (prevMode) prevMode.textContent = "Logged in";
       if (prevLogin) prevLogin.textContent = "Just now · web";
 
-      // Update profile card
+      // Update profile
       const profName = document.getElementById("profile-name");
       const profEmail = document.getElementById("profile-email");
       const profAvatar = document.getElementById("profile-avatar");
@@ -818,7 +1004,7 @@
       if (profName) profName.textContent = fullName;
       if (profEmail) profEmail.textContent = email;
       if (profAvatar) profAvatar.textContent = initials;
-      if (profBalance) profBalance.textContent = "$" + formatMoney(base);
+      if (profBalance) profBalance.textContent = "$" + formatMoney(currentBalance);
       if (profChange) profChange.textContent = "+" + change + "% today";
       if (profLastLogin) profLastLogin.textContent = "Just now · " + network;
 
@@ -827,7 +1013,7 @@
         const tags = [
           "Demo profile active",
           network,
-          "Virtual balance: $" + formatMoney(base),
+          "Virtual balance: $" + formatMoney(currentBalance),
           "Safe front-end only"
         ];
         tags.forEach(t => {
@@ -838,8 +1024,82 @@
         });
       }
 
-      // Smooth scroll to profile
-      scrollToSection("profile");
+      // Update portfolio card
+      const portfolioOwner = document.getElementById("portfolio-owner");
+      const portfolioTotal = document.getElementById("portfolio-total");
+      if (portfolioOwner) portfolioOwner.textContent = fullName;
+      if (portfolioTotal) portfolioTotal.textContent = "$" + formatMoney(currentBalance);
+
+      // Show dashboard section
+      const dash = document.getElementById("dashboard");
+      if (dash) dash.classList.remove("hidden");
+
+      // Scroll to dashboard (portfolio + mining)
+      scrollToSection("dashboard");
+    });
+  }
+
+  // Virtual mining logic
+  let miningActive = false;
+  let miningTimer = null;
+  let minedAmount = 0;
+  let hashrate = 0;
+
+  const miningBtn = document.getElementById("mining-btn");
+  const miningStatus = document.getElementById("mining-status");
+  const miningHashrate = document.getElementById("mining-hashrate");
+  const miningEarned = document.getElementById("mining-earned");
+
+  function updateMiningDisplay() {
+    if (miningEarned) {
+      miningEarned.textContent = minedAmount.toFixed(8) + " BTC";
+    }
+    if (miningHashrate) {
+      miningHashrate.textContent = "Hashrate: " + hashrate.toFixed(1) + " MH/s (fake)";
+    }
+  }
+
+  if (miningBtn && miningStatus && miningHashrate && miningEarned) {
+    miningBtn.addEventListener("click", () => {
+      miningActive = !miningActive;
+      if (miningActive) {
+        hashrate = 30 + Math.random() * 50; // 30–80 MH/s
+        miningStatus.textContent = "Status: mining… (virtual)";
+        miningBtn.textContent = "Stop fake mining";
+        updateMiningDisplay();
+
+        miningTimer = setInterval(() => {
+          const delta = (hashrate / 1000000) * (Math.random() * 0.5 + 0.5); // отирик формула
+          minedAmount += delta;
+          updateMiningDisplay();
+        }, 1000);
+      } else {
+        miningStatus.textContent = "Status: paused";
+        miningBtn.textContent = "Resume fake mining";
+        if (miningTimer) clearInterval(miningTimer);
+      }
+    });
+  }
+
+  // Notes with localStorage
+  const notesText = document.getElementById("notes-text");
+  const notesSave = document.getElementById("notes-save");
+  const notesStatus = document.getElementById("notes-status");
+
+  if (notesText && window.localStorage) {
+    const saved = localStorage.getItem("novaNotes");
+    if (saved) {
+      notesText.value = saved;
+      if (notesStatus) notesStatus.textContent = "Loaded from browser storage.";
+    }
+  }
+
+  if (notesSave && notesText && window.localStorage) {
+    notesSave.addEventListener("click", () => {
+      localStorage.setItem("novaNotes", notesText.value);
+      if (notesStatus) {
+        notesStatus.textContent = "Saved locally at " + new Date().toLocaleTimeString();
+      }
     });
   }
 </script>
