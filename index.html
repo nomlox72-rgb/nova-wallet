@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NovaWallet · Ultra Crypto Wallet</title>
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+      color-scheme: dark;
+      --bg: #020617;
+      --bg-alt: #02081b;
+      --card: #020617;
+      --card-border: rgba(148, 163, 184, 0.25);
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent1: #22c55e;
+      --accent2: #22d3ee;
+      --accent3: #a855f7;
+      --danger: #fb7185;
+    }
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #000 0, #020617 40%, #000 100%);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+    .bg-aurora {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.22), transparent 55%),
+        radial-gradient(circle at 100% 0%, rgba(34, 197, 94, 0.2), transparent 55%),
+        radial-gradient(circle at 50% 100%, rgba(168, 85, 247, 0.25), transparent 60%);
+      filter: blur(120px);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+    header {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 18px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(22px);
+    }
+    .header-inner {
+      width: 100%;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.9), rgba(2, 6, 23, 0.95));
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .logo-orb {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background: conic-gradient(from 130deg, var(--accent1), var(--accent2), #6366f1, var(--accent3), var(--accent1));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0 0 22px rgba(34, 211, 238, 0.8);
+    }
+    .logo-orb-inner {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: #020617;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--text);
+    }
+    nav {
+      display: flex;
+      gap: 14px;
+      font-size: 13px;
+    }
+    nav a {
+      text-decoration: none;
+      color: var(--muted);
+      padding: 5px 9px;
+      border-radius: 999px;
+    }
+    nav a:hover {
+      background: rgba(30, 64, 175, 0.45);
+      color: var(--text);
+    }
+    .header-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .btn {
+      border-radius: 999px;
+      border: none;
+      padding: 8px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease, background 0.12s ease;
+    }
+    .btn-primary {
+      background: linear-gradient(120deg, var(--accent1), var(--accent2));
+      color: #020617;
+      box-shadow: 0 0 20px rgba(45, 212, 191, 0.6);
+    }
+    .btn-primary:hover {
+      opacity: 0.9;
+      transform: translateY(-0.5px);
+    }
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      color: var(--text);
+    }
+    .btn-ghost:hover {
+      background: rgba(15, 23, 42, 0.95);
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      color: var(--text);
+    }
+    .btn-outline:hover {
+      background: rgba(15, 23, 42, 0.9);
+    }
+    .layout {
+      max-width: 1120px;
+      margin: 28px auto 0;
+      padding: 0 18px 40px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1.1fr);
+      gap: 24px;
+      align-items: stretch;
+    }
+    .hero {
+      padding-right: 8px;
+      padding-top: 10px;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 5px 11px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9));
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+    .chip-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--accent1);
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.9);
+    }
+    .hero-title {
+      font-size: clamp(28px, 3.3vw + 8px, 40px);
+      line-height: 1.1;
+      margin-bottom: 10px;
+    }
+    .gradient-text {
+      background: linear-gradient(120deg, var(--accent1), var(--accent2), var(--accent3));
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    .hero-subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      max-width: 460px;
+      margin-bottom: 18px;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 8px;
+    }
+    .metric-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+    .metric-value {
+      font-size: 14px;
+    }
+    .metric-positive {
+      color: #4ade80;
+      font-size: 12px;
+    }
+    .panel {
+      border-radius: 24px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, 0.14), transparent 60%),
+        radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.18), transparent 55%),
+        rgba(15, 23, 42, 0.96);
+      padding: 18px 16px 16px;
+      box-shadow: 0 22px 60px rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(22px);
+      position: relative;
+      overflow: hidden;
+    }
+    .panel-orbit {
+      position: absolute;
+      inset: -40%;
+      border-radius: 999px;
+      border: 1px dashed rgba(148, 163, 184, 0.25);
+      opacity: 0.25;
+      pointer-events: none;
+    }
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 13px;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+    .panel-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .status-dot-online {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent1);
+      box-shadow: 0 0 8px rgba(34, 197, 94, 0.95);
+    }
+    .clock {
+      font-variant-numeric: tabular-nums;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .panel-main {
+      position: relative;
+      z-index: 1;
+    }
+    .wallet-balance-card {
+      border-radius: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      padding: 12px 12px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+      background: rgba(15, 23, 42, 0.96);
+    }
+    .wallet-balance-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+    .wallet-balance-amount {
+      font-size: 20px;
+      font-weight: 600;
+    }
+    .wallet-balance-change {
+      font-size: 12px;
+      color: #4ade80;
+    }
+    .wallet-network-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 10px;
+      background: rgba(15, 23, 42, 0.96);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      color: var(--muted);
+    }
+    .chain-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, var(--accent2), var(--accent3));
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.9);
+    }
+    .wallet-address-card {
+      border-radius: 16px;
+      border: 1px solid rgba(55, 65, 81, 0.95);
+      padding: 10px 10px 9px;
+      margin-bottom: 10px;
+      background: rgba(15, 23, 42, 0.96);
+      font-size: 12px;
+    }
+    .wallet-address-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .wallet-address {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 12px;
+    }
+    .wallet-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .wallet-tag {
+      font-size: 10px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(55, 65, 81, 1);
+      background: rgba(15, 23, 42, 1);
+      color: var(--muted);
+    }
+    .wallet-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .btn-icon {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 7px 10px;
+      border: 1px solid rgba(55, 65, 81, 0.95);
+      background: rgba(15, 23, 42, 0.98);
+      font-size: 11px;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .btn-icon span {
+      font-size: 13px;
+    }
+    .wallet-table {
+      border-radius: 16px;
+      border: 1px solid rgba(31, 41, 55, 1);
+      padding: 8px 10px 8px;
+      font-size: 12px;
+      background: rgba(15, 23, 42, 0.98);
+      margin-top: 10px;
+    }
+    .wallet-table-head,
+    .wallet-table-row {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr 0.9fr 0.9fr;
+      padding: 6px 0;
+      align-items: center;
+    }
+    .wallet-table-head {
+      font-size: 11px;
+      color: var(--muted);
+      border-bottom: 1px solid rgba(31, 41, 55, 1);
+      margin-bottom: 2px;
+    }
+    .wallet-table-head span:nth-child(2),
+    .wallet-table-head span:nth-child(3),
+    .wallet-table-head span:nth-child(4),
+    .wallet-table-row span:nth-child(2),
+    .wallet-table-row span:nth-child(3),
+    .wallet-table-row span:nth-child(4) {
+      text-align: right;
+    }
+    .wallet-table-row + .wallet-table-row {
+      border-top: 1px dashed rgba(31, 41, 55, 0.95);
+    }
+    .change-up {
+      color: #4ade80;
+    }
+    .change-down {
+      color: var(--danger);
+    }
+    .change-flat {
+      color: var(--muted);
+    }
+    .auth-section {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 18px 32px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.15fr);
+      gap: 20px;
+    }
+    .auth-card {
+      border-radius: 22px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.14), transparent 60%), rgba(15, 23, 42, 0.98);
+      padding: 18px 16px 18px;
+      backdrop-filter: blur(18px);
+    }
+    .auth-card h2 {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+    .auth-note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .input-group {
+      margin-top: 8px;
+    }
+    .input-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 4px;
+      display: block;
+    }
+    .input {
+      width: 100%;
+      padding: 9px 11px;
+      border-radius: 12px;
+      border: 1px solid rgba(55, 65, 81, 0.95);
+      background: rgba(15, 23, 42, 0.98);
+      color: var(--text);
+      font-size: 13px;
+      outline: none;
+      font-family: inherit;
+    }
+    .input:focus {
+      border-color: var(--accent1);
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.55);
+    }
+    .auth-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .auth-helper {
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .auth-links {
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .auth-links a {
+      color: var(--accent2);
+      text-decoration: none;
+    }
+    .auth-links a:hover {
+      text-decoration: underline;
+    }
+    .auth-secondary {
+      border-radius: 22px;
+      border: 1px solid rgba(31, 41, 55, 1);
+      background: rgba(15, 23, 42, 0.98);
+      padding: 18px 16px 18px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    .pill {
+      border-radius: 999px;
+      border: 1px solid rgba(55, 65, 81, 1);
+      padding: 4px 8px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .section {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 4px 18px 0;
+    }
+    .section-title {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      padding-bottom: 26px;
+    }
+    .feature-card {
+      border-radius: 18px;
+      border: 1px solid rgba(31, 41, 55, 1);
+      background: rgba(15, 23, 42, 0.98);
+      padding: 12px;
+      font-size: 13px;
+    }
+    .feature-card h3 {
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+    .feature-card p {
+      color: var(--muted);
+    }
+    .footer {
+      max-width: 1120px;
+      margin: 24px auto 30px;
+      padding: 12px 18px 0;
+      border-top: 1px solid rgba(31, 41, 55, 1);
+      font-size: 11px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    @media (max-width: 920px) {
+      header {
+        padding: 12px 10px 6px;
+      }
+      .header-inner {
+        flex-wrap: wrap;
+        justify-content: center;
+        padding-inline: 12px;
+      }
+      nav {
+        display: none;
+      }
+      .layout {
+        grid-template-columns: minmax(0, 1fr);
+        padding-inline: 10px;
+      }
+      .panel {
+        order: -1;
+      }
+      .auth-section {
+        grid-template-columns: minmax(0, 1fr);
+        padding-inline: 10px;
+      }
+      .section {
+        padding-inline: 10px;
+      }
+      .footer {
+        padding-inline: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="bg-aurora"></div>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-orb">
+        <div class="logo-orb-inner">N</div>
+      </div>
+      NovaWallet
+    </div>
+    <nav>
+      <a href="#wallet">Wallet</a>
+      <a href="#auth">Registration</a>
+      <a href="#features">Features</a>
+    </nav>
+    <div class="header-actions">
+      <button class="btn btn-ghost">Sign in</button>
+      <button class="btn btn-primary">Open Web Wallet</button>
+    </div>
+  </div>
+</header>
+
+<main class="layout">
+  <section class="hero">
+    <div class="chip">
+      <span class="chip-dot"></span>
+      Ultra UI · Front-end only · No real funds
+    </div>
+    <h1 class="hero-title">
+      Kazakhstan style <span class="gradient-text">crypto wallet</span> with pro-level design.
+    </h1>
+    <p class="hero-subtitle">
+      Full-screen dark mode dashboard, fake registration and wallet interface, ready to deploy to Render.
+      Үлкен аудиторияға көрсетсең де, уят емес профессионал дизайн.
+    </p>
+    <div class="hero-actions">
+      <button class="btn btn-primary">Create demo wallet</button>
+      <button class="btn btn-outline">View fake portfolio</button>
+    </div>
+    <div class="hero-metrics">
+      <div>
+        <span class="metric-label">Demo total balance</span>
+        <div class="metric-value">$12,540.88</div>
+        <div class="metric-positive">+3.4% today</div>
+      </div>
+      <div>
+        <span class="metric-label">Networks</span>
+        <div class="metric-value">Ethereum · BNB · Tron</div>
+      </div>
+      <div>
+        <span class="metric-label">Security</span>
+        <div class="metric-value">Non-custodial UI</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="wallet">
+    <div class="panel-orbit"></div>
+    <div class="panel-header">
+      <div class="panel-pill">
+        <span class="status-dot-online"></span>
+        Demo wallet · Online
+      </div>
+      <div class="clock" id="wallet-clock">--:--:--</div>
+    </div>
+    <div class="panel-main">
+      <div class="wallet-balance-card">
+        <div>
+          <div class="wallet-balance-label">Total balance (demo)</div>
+          <div class="wallet-balance-amount">$12,540.88</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="wallet-balance-change">+3.4% today</div>
+          <div class="wallet-network-chip">
+            <span class="chain-dot"></span>
+            Ethereum mainnet (UI only)
+          </div>
+        </div>
+      </div>
+
+      <div class="wallet-address-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+          <span>Receive crypto (fake)</span>
+          <span style="font-size:11px;color:var(--muted);">QR / Address</span>
+        </div>
+        <div class="wallet-address-row">
+          <span class="wallet-address" id="wallet-address">0xA92f...93EF2211</span>
+          <button class="btn btn-ghost" id="copy-btn" style="padding:5px 9px;font-size:11px;">Copy</button>
+        </div>
+        <div class="wallet-tags">
+          <span class="wallet-tag">Kaspi style UI</span>
+          <span class="wallet-tag">Dark gradient</span>
+          <span class="wallet-tag">Static demo</span>
+        </div>
+        <div class="wallet-cta-row">
+          <button class="btn-icon"><span>↗</span>Send</button>
+          <button class="btn-icon"><span>⬇</span>Receive</button>
+          <button class="btn-icon"><span>⟳</span>Swap</button>
+        </div>
+      </div>
+
+      <div class="wallet-table">
+        <div class="wallet-table-head">
+          <span>Asset</span>
+          <span>Price</span>
+          <span>24h</span>
+          <span>Share</span>
+        </div>
+        <div class="wallet-table-row">
+          <span>BTC</span>
+          <span>$42,300</span>
+          <span class="change-up">+2.1%</span>
+          <span>40%</span>
+        </div>
+        <div class="wallet-table-row">
+          <span>ETH</span>
+          <span>$2,340</span>
+          <span class="change-up">+1.4%</span>
+          <span>32%</span>
+        </div>
+        <div class="wallet-table-row">
+          <span>BNB</span>
+          <span>$330</span>
+          <span class="change-down">−0.8%</span>
+          <span>10%</span>
+        </div>
+        <div class="wallet-table-row">
+          <span>SOL</span>
+          <span>$95.1</span>
+          <span class="change-up">+6.2%</span>
+          <span>8%</span>
+        </div>
+        <div class="wallet-table-row">
+          <span>USDT</span>
+          <span>$1.00</span>
+          <span class="change-flat">0.0%</span>
+          <span>10%</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<section id="auth" class="auth-section">
+  <div class="auth-card">
+    <h2>Create an account</h2>
+    <p class="auth-note">
+      Бұл тіркеу формасы тек UI үшін. Реальный backend, база, blockchain қосылмаған.
+    </p>
+    <div class="auth-row">
+      <div class="input-group">
+        <label class="input-label">First name</label>
+        <input class="input" placeholder="Ayan" />
+      </div>
+      <div class="input-group">
+        <label class="input-label">Last name</label>
+        <input class="input" placeholder="KZ" />
+      </div>
+    </div>
+    <div class="input-group">
+      <label class="input-label">E-mail</label>
+      <input class="input" type="email" placeholder="you@example.com" />
+    </div>
+    <div class="auth-row">
+      <div class="input-group">
+        <label class="input-label">Password</label>
+        <input class="input" type="password" placeholder="••••••••" />
+      </div>
+      <div class="input-group">
+        <label class="input-label">Repeat password</label>
+        <input class="input" type="password" placeholder="••••••••" />
+      </div>
+    </div>
+    <div class="input-group">
+      <label class="input-label">Preferred network</label>
+      <select class="input" style="appearance:none;cursor:pointer;">
+        <option>Ethereum mainnet (demo)</option>
+        <option>BNB Chain (demo)</option>
+        <option>Tron (demo)</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" style="margin-top:12px;width:100%;">Register demo account</button>
+    <p class="auth-helper">
+      Тіркелгеннен кейін фейк портфолио, баланс және транзакциялар тек UI түрінде көрсетіледі.
+    </p>
+    <p class="auth-links">
+      Already have demo account? <a href="#wallet">Open wallet</a>
+    </p>
+  </div>
+
+  <div class="auth-secondary">
+    <h3 style="font-size:14px;margin-bottom:6px;">Why this UI looks “expensive”</h3>
+    <p>
+      • Layered gradients, кәсіби dark-палитра<br />
+      • Glassmorphism карталар, radius 20+<br />
+      • Жай ғана таблица емес, толық wallet-композиция<br />
+      • Секунд сайын жүретін сағат, адрес copy, action батырмалар
+    </p>
+    <div class="pill-row">
+      <span class="pill">Render-ready</span>
+      <span class="pill">No backend required</span>
+      <span class="pill">Kazakhstan presentation</span>
+      <span class="pill">Crypto-style gradients</span>
+    </div>
+    <p>
+      Бұл шаблонды кез келген доменге, Render / Vercel / Netlify-ға лақтырып, портфолиоға,
+      инвесторларға, клиентке көрсетуге болады. Кез келген құрылғыда адаптив.
+    </p>
+  </div>
+</section>
+
+<section id="features" class="section">
+  <h2 class="section-title">Feature set (front-end only)</h2>
+  <div class="features-grid">
+    <article class="feature-card">
+      <h3>Wallet dashboard</h3>
+      <p>Fake balance, multi-asset portfolio, send/receive/swap actions. Барлығы дайын UI, тек backend қоссан болды.</p>
+    </article>
+    <article class="feature-card">
+      <h3>Security-first copy</h3>
+      <p>Everywhere it is clearly written that this is a demo. No real money. Бұл да маңызды, уят болмайсың.</p>
+    </article>
+    <article class="feature-card">
+      <h3>Render-friendly</h3>
+      <p>Single <code>index.html</code> файлы. Static site ретінде Render-ге бірден қоюға болады, build командасы керек емес.</p>
+    </article>
+    <article class="feature-card">
+      <h3>Responsive design</h3>
+      <p>Header compact, панель төменге түседі, телефонда да аккурат көрінеді. Нормальный production деңгей.</p>
+    </article>
+  </div>
+</section>
+
+<footer class="footer">
+  <span>© 2025 NovaWallet Demo · Front-end only · No real blockchain</span>
+  <span>Built as a professional crypto wallet UI template for presentations.</span>
+</footer>
+
+<script>
+  function updateClock() {
+    const el = document.getElementById("wallet-clock");
+    if (!el) return;
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, "0");
+    const m = String(now.getMinutes()).padStart(2, "0");
+    const s = String(now.getSeconds()).padStart(2, "0");
+    el.textContent = h + ":" + m + ":" + s;
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  const copyBtn = document.getElementById("copy-btn");
+  const addrEl = document.getElementById("wallet-address");
+  if (copyBtn && addrEl && navigator.clipboard) {
+    copyBtn.addEventListener("click", () => {
+      navigator.clipboard.writeText(addrEl.textContent.trim())
+        .then(() => {
+          copyBtn.textContent = "Copied";
+          setTimeout(() => { copyBtn.textContent = "Copy"; }, 1400);
+        })
+        .catch(() => {
+          copyBtn.textContent = "Error";
+          setTimeout(() => { copyBtn.textContent = "Copy"; }, 1400);
+        });
+    });
+  }
+</script>
+
+</body>
+</html>
